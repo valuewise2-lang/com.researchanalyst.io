@@ -1,0 +1,91 @@
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 1,
+    "analysis": {
+      "analyzer": {
+        "company_name_analyzer": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "asciifolding",
+            "company_edge_ngram"
+          ]
+        },
+        "company_search_analyzer": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "asciifolding"
+          ]
+        }
+      },
+      "filter": {
+        "company_edge_ngram": {
+          "type": "edge_ngram",
+          "min_gram": 2,
+          "max_gram": 20
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "company_id": {
+        "type": "long"
+      },
+      "isin": {
+        "type": "keyword"
+      },
+      "display_name": {
+        "type": "text",
+        "analyzer": "company_name_analyzer",
+        "search_analyzer": "company_search_analyzer",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          },
+          "completion": {
+            "type": "completion"
+          }
+        }
+      },
+      "ticker": {
+        "type": "keyword",
+        "fields": {
+          "text": {
+            "type": "text"
+          }
+        }
+      },
+      "exchange": {
+        "type": "keyword"
+      },
+      "sector_name": {
+        "type": "keyword",
+        "fields": {
+          "text": {
+            "type": "text"
+          }
+        }
+      },
+      "slug": {
+        "type": "keyword"
+      },
+      "aliases": {
+        "type": "text",
+        "analyzer": "company_name_analyzer",
+        "search_analyzer": "company_search_analyzer",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}
+
+
